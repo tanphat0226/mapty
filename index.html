@@ -32,6 +32,43 @@
     <div class="sidebar">
       <img src="logo.png" alt="Logo" class="logo" />
 
+      <section class="feature">
+        <button class="feature__btn feature__reset">
+          Reset Workout
+          <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path
+              fill="currentColor"
+              d="M170.5 51.6L151.5 80h145l-19-28.4c-1.5-2.2-4-3.6-6.7-3.6H177.1c-2.7 0-5.2 1.3-6.7 3.6zm147-26.6L354.2 80H368h48 8c13.3 0 24 10.7 24 24s-10.7 24-24 24h-8V432c0 44.2-35.8 80-80 80H112c-44.2 0-80-35.8-80-80V128H24c-13.3 0-24-10.7-24-24S10.7 80 24 80h8H80 93.8l36.7-55.1C140.9 9.4 158.4 0 177.1 0h93.7c18.7 0 36.2 9.4 46.6 24.9zM80 128V432c0 17.7 14.3 32 32 32H336c17.7 0 32-14.3 32-32V128H80zm80 64V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0V400c0 8.8-7.2 16-16 16s-16-7.2-16-16V192c0-8.8 7.2-16 16-16s16 7.2 16 16z"
+            />
+          </svg> -->
+        </button>
+        <button class="feature__btn feature__filter-filter">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path
+              fill="#aaa"
+              d="M3.9 54.9C10.5 40.9 24.5 32 40 32H472c15.5 0 29.5 8.9 36.1 22.9s4.6 30.5-5.2 42.5L320 320.9V448c0 12.1-6.8 23.2-17.7 28.6s-23.8 4.3-33.5-3l-64-48c-8.1-6-12.8-15.5-12.8-25.6V320.9L9 97.3C-.7 85.4-2.8 68.8 3.9 54.9z"
+            />
+          </svg>
+
+          <div class="filter">
+            <div class="filter__field">
+              <input id="distance" type="radio" name="filter" hidden />
+              <label for="distance" class="filter__field-label"
+                >🗺 Distance</label
+              >
+            </div>
+            <div class="filter__field">
+              <input id="time" type="radio" name="filter" hidden />
+              <label for="time" class="filter__field-label">⌛ Time</label>
+            </div>
+            <div class="filter__field">
+              <input id="speed" type="radio" name="filter" hidden />
+              <label for="speed" class="filter__field-label">⚡️ Speed</label>
+            </div>
+          </div>
+        </button>
+      </section>
+
       <ul class="workouts">
         <form class="form hidden">
           <div class="form__row">
