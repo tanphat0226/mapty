@@ -8,8 +8,8 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 const filterBtn = document.querySelector('.feature__filter-filter');
-const filter = document.querySelector('.filter');
 const resetBtn = document.querySelector('.feature__reset');
+const filter = document.querySelector('.filter');
 
 class Workout {
   date = new Date();
@@ -79,6 +79,7 @@ class App {
   #mapZoomLevel = 13;
   #mapEvent;
   #workouts = [];
+  #isFiltered = false;
 
   constructor() {
     // Get user's position
@@ -93,6 +94,8 @@ class App {
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
     filterBtn.addEventListener('mousemove', this._showFilterSelect);
     filterBtn.addEventListener('mouseout', this._hideFilterSelect);
+    filter.addEventListener('click', this._filterWorkouts.bind(this));
+    resetBtn.addEventListener('click', this.reset);
   }
 
   _getPosition() {
@@ -129,6 +132,7 @@ class App {
 
   _showForm(mapE) {
     this.#mapEvent = mapE;
+    this.#isFiltered = false;
     form.classList.remove('hidden');
     inputDistance.focus();
   }
@@ -237,20 +241,83 @@ class App {
 
   _renderWorkout(workout) {
     let html = `
+    <form class="form hidden">
+    <div class="form__row">
+      <label class="form__label">Type</label>
+      <select class="form__input form__input--type">
+        <option value="running">Running</option>
+        <option value="cycling">Cycling</option>
+      </select>
+    </div>
+    <div class="form__row">
+      <label class="form__label">Distance</label>
+      <input class="form__input form__input--distance" placeholder="km" />
+    </div>
+    <div class="form__row">
+      <label class="form__label">Duration</label>
+      <input
+        class="form__input form__input--duration"
+        placeholder="min"
+      />
+    </div>
+    <div class="form__row">
+      <label class="form__label">Cadence</label>
+      <input
+        class="form__input form__input--cadence"
+        placeholder="step/min"
+      />
+    </div>
+    <div class="form__row form__row--hidden">
+      <label class="form__label">Elev Gain</label>
+      <input
+        class="form__input form__input--elevation"
+        placeholder="meters"
+      />
+    </div>
+    <button class="form__btn">OK</button>
+  </form>
+
       <li class="workout workout--${workout.type}" data-id="${workout.id}">
-          <h2 class="workout__title">${workout.description}</h2>
-          <div class="workout__details">
-            <span class="workout__icon">${
-              workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
-            }</span>
-            <span class="workout__value">${workout.distance}</span>
-            <span class="workout__unit">km</span>
-          </div>
-          <div class="workout__details">
-            <span class="workout__icon">⏱</span>
-            <span class="workout__value">${workout.duration}</span>
-            <span class="workout__unit">min</span>
-          </div>
+        <button class="workout__more">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path
+              class="workout__more-icon"
+              d="M8 256a56 56 0 1 1 112 0A56 56 0 1 1 8 256zm160 0a56 56 0 1 1 112 0 56 56 0 1 1 -112 0zm216-56a56 56 0 1 1 0 112 56 56 0 1 1 0-112z"
+            />
+          </svg>
+
+          <ul class="workout__more-list">
+            <li class="workout__more-item workout__more-item--edit">
+              <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path
+                  d="M362.7 19.3L314.3 67.7 444.3 197.7l48.4-48.4c25-25 25-65.5 0-90.5L453.3 19.3c-25-25-65.5-25-90.5 0zm-71 71L58.6 323.5c-10.4 10.4-18 23.3-22.2 37.4L1 481.2C-1.5 489.7 .8 498.8 7 505s15.3 8.5 23.7 6.1l120.3-35.4c14.1-4.2 27-11.8 37.4-22.2L421.7 220.3 291.7 90.3z"
+                />
+              </svg>
+              Edit
+            </li>
+            <li class="workout__more-item workout__more-item--delete">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path
+                  d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"
+                />
+              </svg>
+              Delete
+            </li>
+          </ul>
+        </button>
+        <h2 class="workout__title">${workout.description}</h2>
+        <div class="workout__details">
+          <span class="workout__icon">${
+            workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'
+          }</span>
+          <span class="workout__value">${workout.distance}</span>
+          <span class="workout__unit">km</span>
+        </div>
+        <div class="workout__details">
+          <span class="workout__icon">⏱</span>
+          <span class="workout__value">${workout.duration}</span>
+          <span class="workout__unit">min</span>
+        </div>
     `;
 
     if (workout.type === 'running')
@@ -304,6 +371,31 @@ class App {
 
     // using the public interface
     // workout.click();
+  }
+
+  _filterWorkouts(e) {
+    this.#isFiltered = true;
+    const filterSelect = e.target.closest('.filter__select');
+
+    if (!filterSelect) return;
+
+    // Clear existing workouts
+    containerWorkouts.innerHTML = '';
+
+    let sortedWorkouts;
+    if (filterSelect.value === 'distance') {
+      sortedWorkouts = [...this.#workouts].sort(
+        (a, b) => a.distance - b.distance
+      );
+    } else if (filterSelect.value === 'time') {
+      sortedWorkouts = [...this.#workouts].sort(
+        (a, b) => a.duration - b.duration
+      );
+    }
+
+    sortedWorkouts.forEach(work => {
+      this._renderWorkout(work);
+    });
   }
 
   _setLocalStorage() {

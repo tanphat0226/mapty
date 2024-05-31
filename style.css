@@ -67,6 +67,7 @@ a:visited {
 }
 
 .workout {
+  position: relative;
   background-color: var(--color-dark--2);
   border-radius: 5px;
   padding: 1.5rem 2.25rem;
@@ -111,6 +112,72 @@ a:visited {
   color: var(--color-light--1);
   text-transform: uppercase;
   font-weight: 800;
+}
+
+.workout__more {
+  position: absolute;
+  top: 0;
+  right: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  background-color: transparent;
+  border: none;
+  color: var(--color-light--1);
+  cursor: pointer;
+}
+
+.workout__more-icon {
+  fill: var(--color-light--3);
+}
+
+.workout__more:hover .workout__more-icon {
+  fill: #2d3439;
+}
+
+.workout__more:hover > .workout__more-list {
+  display: block;
+}
+
+.workout__more-list {
+  display: none;
+  position: absolute;
+  top: 80%;
+  right: 0;
+  min-width: 80px;
+  background-color: var(--color-dark--1);
+  list-style: none;
+  padding: 4px 0;
+  border-radius: 4px;
+  text-align: left;
+  border: 1px solid var(--color-light--3);
+}
+
+.workout__more-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px;
+  cursor: pointer;
+}
+
+.workout__more-item:nth-child(2):hover {
+  color: #e84a5a;
+}
+
+.workout__more-item:first-child:hover,
+.workout__more-item:first-child:hover svg {
+  color: #ffb545;
+}
+
+.workout__more-item svg {
+  fill: currentColor;
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
 }
 
 .form {
@@ -245,6 +312,7 @@ a:visited {
 }
 
 .filter {
+  z-index: 1;
   display: none;
   position: absolute;
   top: calc(100% + 4px);
@@ -270,8 +338,10 @@ a:visited {
 
 .filter__field {
   display: flex;
-  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   gap: 8px;
+
   padding: 12px 8px;
   cursor: pointer;
 }
