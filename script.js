@@ -79,7 +79,6 @@ class App {
   #mapZoomLevel = 13;
   #mapEvent;
   #workouts = [];
-  #isFiltered = false;
 
   constructor() {
     // Get user's position
@@ -132,7 +131,6 @@ class App {
 
   _showForm(mapE) {
     this.#mapEvent = mapE;
-    this.#isFiltered = false;
     form.classList.remove('hidden');
     inputDistance.focus();
   }
@@ -350,7 +348,7 @@ class App {
         </li>
       `;
 
-    form.insertAdjacentHTML('afterend', html);
+    containerWorkouts.insertAdjacentHTML('afterbegin', html);
   }
 
   _moveToPopup(e) {
@@ -374,7 +372,6 @@ class App {
   }
 
   _filterWorkouts(e) {
-    this.#isFiltered = true;
     const filterSelect = e.target.closest('.filter__select');
 
     if (!filterSelect) return;
