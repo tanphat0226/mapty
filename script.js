@@ -79,6 +79,7 @@ class App {
   #mapZoomLevel = 13;
   #mapEvent;
   #workouts = [];
+  #markers = [];
 
   constructor() {
     // Get user's position
@@ -224,24 +225,32 @@ class App {
     const workoutEl = e.target.closest('.workout');
     const deleteBtn = e.target.classList.contains('workout__more-item--delete');
 
+    // If not delete button, return
     if (!deleteBtn) return;
 
-    // Delete item
-    this.#workouts = this.#workouts.filter(
-      work => work.id !== workoutEl.dataset.id
+    // Find workout to delete by id
+    const workout = this.#workouts.find(
+      work => work.id === workoutEl.dataset.id
     );
+
+    // Delete item
+    this.#workouts = this.#workouts.filter(work => work.id !== workout.id);
 
     // Set localStorage again
     this._setLocalStorage();
 
+    // Delete marker
+    this._removeWorkoutMarker(workout);
+
     // Clear existing workouts
     containerWorkouts.innerHTML = '';
 
+    // Render workouts list again
     this.#workouts.forEach(work => this._renderWorkout(work));
   }
 
   _renderWorkoutMarker(workout) {
-    L.marker(workout.coords)
+    const marker = L.marker(workout.coords)
       .addTo(this.#map)
       .bindPopup(
         L.popup({
@@ -256,6 +265,19 @@ class App {
         `${workout.type === 'running' ? '🏃‍♂️' : '🚴‍♀️'} ${workout.description}`
       )
       .openPopup();
+
+    this.#markers.push(marker);
+  }
+
+  _removeWorkoutMarker(workout) {
+    const [lat, lng] = workout.coords;
+
+    // Find marker by lat, lng
+    this.#markers.forEach(marker => {
+      if (marker._latlng.lat === lat && marker._latlng.lng === lng) {
+        marker.remove();
+      }
+    });
   }
 
   _renderWorkout(workout) {
