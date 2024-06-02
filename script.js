@@ -447,6 +447,15 @@ class App {
 
     if (!data) return;
 
+    // Restoring data from local storage
+    data.forEach(work => {
+      if (work.type === 'running') {
+        Object.setPrototypeOf(work, Running.prototype);
+      } else if (work.type === 'cycling') {
+        Object.setPrototypeOf(work, Cycling.prototype);
+      }
+    });
+
     this.#workouts = data;
 
     this.#workouts.forEach(work => {
