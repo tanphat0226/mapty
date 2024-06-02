@@ -91,6 +91,7 @@ class App {
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleEleventionField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
+    containerWorkouts.addEventListener('click', this._deleteWorkout.bind(this));
     filterBtn.addEventListener('mousemove', this._showFilterSelect);
     filterBtn.addEventListener('mouseout', this._hideFilterSelect);
     filter.addEventListener('click', this._filterWorkouts.bind(this));
@@ -217,6 +218,26 @@ class App {
 
     // Set local storage to all workouts
     this._setLocalStorage();
+  }
+
+  _deleteWorkout(e) {
+    const workoutEl = e.target.closest('.workout');
+    const deleteBtn = e.target.classList.contains('workout__more-item--delete');
+
+    if (!deleteBtn) return;
+
+    // Delete item
+    this.#workouts = this.#workouts.filter(
+      work => work.id !== workoutEl.dataset.id
+    );
+
+    // Set localStorage again
+    this._setLocalStorage();
+
+    // Clear existing workouts
+    containerWorkouts.innerHTML = '';
+
+    this.#workouts.forEach(work => this._renderWorkout(work));
   }
 
   _renderWorkoutMarker(workout) {
@@ -376,7 +397,7 @@ class App {
 
     if (!filterSelect) return;
 
-    // Clear existing workouts
+    // // Clear existing workouts
     containerWorkouts.innerHTML = '';
 
     let sortedWorkouts;
